@@ -4,11 +4,20 @@ import { cn } from "@/lib/utils";
 import { NavLink, useLocation } from "react-router";
 import Button from "./Button";
 import { FiLogOut } from "react-icons/fi";
+import { useAuth } from "@/stores";
+import { AUTH_PREFIX } from "@/data/routes.data";
+import { useLogout } from "@/features/auth/utils";
 
 export default function Sidebar() {
   const { pathname } = useLocation();
+  const { isLoggedIn } = useAuth();
+  const isAuthRoute = pathname.startsWith(AUTH_PREFIX);
+  const { logout } = useLogout();
+
+  if (isAuthRoute) return null;
+
   return (
-    <div className="bg-surface w-[18rem] h-screen p-4 flex items-start justify-start flex-col gap-6">
+    <div className="bg-sur w-[16rem] h-screen p-4 flex items-start justify-start flex-col gap-6 border-r border-r-bor sticky top-0 left-0">
       <div className="w-full flex items-center justify-start">
         <img src={rivoIconImg} alt="Rivo logo" className="w-14" />
       </div>
@@ -63,10 +72,15 @@ export default function Sidebar() {
             </NavLink>
           );
         })}
-        <Button className="flex items-center justify-start gap-2 text-red-600 p-2.5 w-full text-sm">
-          <FiLogOut />
-          Logout
-        </Button>
+        {isLoggedIn && (
+          <Button
+            onClick={logout}
+            className="flex items-center justify-start gap-2 text-red-600 p-2.5 w-full text-sm"
+          >
+            <FiLogOut />
+            Logout
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -48,3 +48,5 @@ export const subSidebarData = [
     Icon: Settings,
   },
 ];
+
+export const hideNavRoutes = ["/auth/login", "/auth/register"];

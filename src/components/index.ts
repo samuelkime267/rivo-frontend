@@ -1,3 +1,9 @@
 export { default as Sidebar } from "./Sidebar";
 export { default as Header } from "./Header";
 export { default as LiveStream } from "./LiveStream";
+export { default as Input } from "./Input";
+export { default as TextArea } from "./TextArea";
+export { default as Button } from "./Button";
+export { default as AuthSideImg } from "./AuthSideImg";
+export { default as InlineLoader } from "./InlineLoader";
+export { default as ErrorText } from "./ErrorText";

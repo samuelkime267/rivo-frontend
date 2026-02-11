@@ -1,9 +1,15 @@
-import { authRoutes, publicRoutes } from "@/data/routes.data";
+import {
+  authRoutes,
+  authVerificationRoutes,
+  DEFAULT_AUTH_REDIRECT_ROUTE,
+  DEFAULT_REDIRECT_ROUTE,
+  publicRoutes,
+} from "@/data/routes.data";
 import api from "@/lib/api";
 import { useAuth } from "@/stores";
 import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { useEffect, useLayoutEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { matchPath, useLocation, useNavigate } from "react-router-dom";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -23,7 +29,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const fetchToken = async () => {
       try {
         setIsLoading(true);
-        const { data } = await api.get("/auth/refresh-token");
+        const { data } = await api.post("/auth/refresh-token");
         setToken(data.token.accessToken);
       } catch {
         setToken(null);
@@ -39,11 +45,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const fetchUser = async () => {
       if (token && !id) {
         try {
-          const { data } = await api.get("/users/me");
+          const { data } = await api.get("/user/me");
           setUser({
             id: data.user._id,
             name: data.user.name,
             email: data.user.email,
+            profilePicture: data.user.profilePicture,
+            authProvider: data.user.authProvider,
+            username: data.user.username,
           });
           setUserDataError(false);
         } catch {
@@ -109,15 +118,29 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }, [setToken]);
 
   useLayoutEffect(() => {
+    const isPublicRoute = publicRoutes.some((route) =>
+      matchPath({ path: route, end: true }, pathname),
+    );
+
+    const isAuthRoute = authRoutes.some((route) =>
+      matchPath({ path: route, end: true }, pathname),
+    );
+
+    const isAuthVerificationRoute = authVerificationRoutes.some((route) =>
+      matchPath({ path: route, end: true }, pathname),
+    );
+
     if (token === undefined) return;
-    if (authRoutes.includes(pathname) && !token) return;
-    if (token === null && !publicRoutes.includes(pathname)) {
-      navigate("/login");
+    if (isAuthRoute && !token) return;
+    if (token === null && !isPublicRoute) {
+      navigate(DEFAULT_AUTH_REDIRECT_ROUTE);
       return;
     }
 
-    if (token && authRoutes.includes(pathname)) {
-      navigate("/dashboard");
+    if (token && isAuthVerificationRoute) return;
+
+    if (token && isAuthRoute) {
+      navigate(DEFAULT_REDIRECT_ROUTE);
     }
   }, [token, pathname, navigate]);
 

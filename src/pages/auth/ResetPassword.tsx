@@ -1,17 +1,17 @@
 import rivoLogo from "@/assets/imgs/rivo-logo.png";
-import { ForgotPasswordForm } from "@/features/auth/components";
+import { ResetPasswordForm } from "@/features/auth/components";
 import { NavLink } from "react-router-dom";
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center gap-4 flex-col">
       <img src={rivoLogo} alt="Rivo logo" className="w-16" />
       <div className="flex items-center justify-center flex-col">
-        <h1 className="text-2xl font-medium">Forgot Password</h1>
-        <p className="text-text-sec">Enter your email to reset your password</p>
+        <h1 className="text-2xl font-medium">Reset Password</h1>
+        <p className="text-text-sec">Enter your new password below</p>
       </div>
       <div className="w-full flex items-center justify-center p-4 flex-col">
-        <ForgotPasswordForm />
+        <ResetPasswordForm />
 
         <p className="text-sm text-center mt-4">
           Don&apos;t have an account?{" "}

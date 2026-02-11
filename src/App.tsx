@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import { pages } from "@/data/pages.data";
-import { Header, Sidebar } from "@/components";
+import { AuthSideImg, Header, Sidebar } from "@/components";
 
 function App() {
   return (
     <div className="flex items-start justify-start relative w-full">
       <Sidebar />
+      <AuthSideImg />
       <div className="w-full flex items-start justify-start flex-col">
         <Header />
         <Routes>
