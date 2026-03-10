@@ -17,7 +17,7 @@ export default function Sidebar() {
   if (isAuthRoute) return null;
 
   return (
-    <div className="bg-sur w-[16rem] h-screen p-4 flex items-start justify-start flex-col gap-6 border-r border-r-bor sticky top-0 left-0">
+    <div className="bg-sur w-[13rem] min-w-[13rem] h-screen p-4 flex items-start justify-start flex-col gap-6 border-r border-r-bor sticky top-0 left-0 z-50">
       <div className="w-full flex items-center justify-start">
         <img src={rivoIconImg} alt="Rivo logo" className="w-14" />
       </div>

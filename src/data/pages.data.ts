@@ -3,6 +3,8 @@ import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import VerifyEmail from "@/pages/auth/VerifyEmail";
+import Dashboard from "@/pages/creator/Dashboard";
+import Stream from "@/pages/creator/Stream";
 import Homepage from "@/pages/Homepage";
 import Notfound from "@/pages/Notfound";
 
@@ -30,6 +32,14 @@ export const pages = [
   {
     path: "/auth/reset-password/:token",
     Component: ResetPassword,
+  },
+  {
+    path: "/creator/dashboard",
+    Component: Dashboard,
+  },
+  {
+    path: "/creator/stream",
+    Component: Stream,
   },
   {
     path: "*",

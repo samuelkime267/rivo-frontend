@@ -1,4 +1,3 @@
-// components/LiveStream.tsx
 import { useEffect, useRef } from "react";
 import Hls from "hls.js";
 
@@ -30,7 +29,16 @@ const LiveStream = ({ streamUrl }: LiveStreamProps) => {
     }
   }, [streamUrl]);
 
-  return <video ref={videoRef} controls autoPlay style={{ width: "100%", height: "auto" }} />;
+  return (
+    <div className="w-full aspect-[16/10] border border-bor bg-sur rounded-lg flex items-center justify-center overflow-hidden max-w-[862px]">
+      <video
+        ref={videoRef}
+        controls
+        autoPlay
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
+  );
 };
 
 export default LiveStream;

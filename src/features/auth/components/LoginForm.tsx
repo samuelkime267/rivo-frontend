@@ -66,7 +66,7 @@ export default function LoginForm() {
           window.location.href = DEFAULT_REDIRECT_ROUTE;
           return;
         }
-
+        console.log("OAuth error:", event.data.error);
         setError(event.data.message);
       }
     };

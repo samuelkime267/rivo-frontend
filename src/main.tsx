@@ -7,6 +7,10 @@ import { AuthProvider } from "@/providers";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "@/styles/global.css";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-coverflow";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +18,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
+        <ReactQueryDevtools buttonPosition="bottom-left" />
         <AuthProvider>
           <Toaster position="top-right" richColors theme="dark" />
           <App />

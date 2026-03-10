@@ -24,7 +24,7 @@ export default function Button({
   return (
     <button
       className={cn(
-        "cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed",
+        "cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed outline-none ring-0 focus:ring-0 focus:ring-offset-0 focus:outline-none",
         btnType && BtnType[btnType],
         className,
       )}

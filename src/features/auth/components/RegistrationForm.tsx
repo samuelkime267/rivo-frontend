@@ -95,7 +95,7 @@ export default function RegistrationForm() {
         error={errors.confirmPassword?.message}
         register={register}
       />
-      <Button type="submit" btnType="primary">
+      <Button disabled={isLoading} type="submit" btnType="primary">
         {isLoading ? <InlineLoader /> : "Register"}
       </Button>
     </form>

@@ -57,7 +57,7 @@ export default function TextArea({
       {label && (
         <label
           htmlFor={name}
-          className={cn("text-xs font-sans capitalize", labelClassName)}
+          className={cn("text-xs capitalize", labelClassName)}
         >
           {label}
           {required && <span className="text-destructive">*</span>}
@@ -66,7 +66,7 @@ export default function TextArea({
 
       <div
         className={cn(
-          "w-full flex items-center justify-between border border-neutral-400 rounded-sm",
+          "w-full flex items-center justify-between border border-neutral-700 rounded-md",
           {
             "border-destructive/60": error,
           },
@@ -74,7 +74,7 @@ export default function TextArea({
         )}
       >
         <textarea
-          className="w-full text-xs outline-none p-2.5 font-sans resize-none"
+          className="w-full text-xs outline-none p-2.5 resize-none"
           disabled={disabled}
           rows={6}
           required={required}
