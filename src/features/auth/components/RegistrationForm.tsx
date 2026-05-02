@@ -1,55 +1,16 @@
-import { useAuth } from "@/stores";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { registerSchema, type RegisterSchemaType } from "../schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Resolver } from "react-hook-form";
-import api from "@/lib/api";
-import { AxiosError } from "axios";
 import { Button, ErrorText, InlineLoader, Input } from "@/components";
+import useRegister from "../utils/useRegister";
+import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import useOAuth from "../utils/useOAuth";
 
 export default function RegistrationForm() {
   const [error, setError] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-  const { setToken, setUser } = useAuth();
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = useForm<RegisterSchemaType>({
-    resolver: zodResolver(
-      registerSchema,
-    ) as unknown as Resolver<RegisterSchemaType>,
-  });
-
-  const submit = async (bodyData: RegisterSchemaType) => {
-    try {
-      setIsLoading(true);
-      setError(undefined);
-
-      const { data } = await api.post("/auth/register", bodyData);
-      setToken(data.token.accessToken);
-      setUser({
-        id: data.user._id,
-        name: data.user.name,
-        email: data.user.email,
-      });
-      navigate("/dashboard");
-    } catch (error) {
-      if (!(error instanceof AxiosError)) {
-        setError("Something went wrong");
-        return;
-      }
-      setError(error.response?.data.message || "Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { formErrors, isLoading, register, submit } = useRegister(setError);
+  const { loginWithGoogle } = useOAuth(setError);
 
   return (
-    <form className="w-full space-y-4 max-w-md" onSubmit={handleSubmit(submit)}>
+    <form className="w-full space-y-4 max-w-md" onSubmit={submit}>
       <ErrorText error={error} />
 
       <Input
@@ -57,7 +18,7 @@ export default function RegistrationForm() {
         name="name"
         required
         placeholder="John Doe"
-        error={errors.name?.message}
+        error={formErrors.name?.message}
         register={register}
       />
       <Input
@@ -65,7 +26,7 @@ export default function RegistrationForm() {
         name="username"
         required
         placeholder="JohnDoe"
-        error={errors.username?.message}
+        error={formErrors.username?.message}
         register={register}
       />
       <Input
@@ -74,7 +35,7 @@ export default function RegistrationForm() {
         name="email"
         required
         placeholder="example@gmail.com"
-        error={errors.email?.message}
+        error={formErrors.email?.message}
         register={register}
       />
       <Input
@@ -83,7 +44,7 @@ export default function RegistrationForm() {
         name="password"
         required
         placeholder="Enter your password"
-        error={errors.password?.message}
+        error={formErrors.password?.message}
         register={register}
       />
       <Input
@@ -92,11 +53,20 @@ export default function RegistrationForm() {
         name="confirmPassword"
         required
         placeholder="Enter your password"
-        error={errors.confirmPassword?.message}
+        error={formErrors.confirmPassword?.message}
         register={register}
       />
       <Button disabled={isLoading} type="submit" btnType="primary">
         {isLoading ? <InlineLoader /> : "Register"}
+      </Button>
+
+      <div className="w-full flex items-center justify-center gap-1">
+        <div className="border-t border-t-text-mute w-full" />
+        <p className="text-xs text-center text-text-mute">or</p>
+        <div className="border-t border-t-text-mute w-full" />
+      </div>
+      <Button type="button" btnType="secondary" onClick={loginWithGoogle}>
+        <FcGoogle className="size-4" /> Register with Google
       </Button>
     </form>
   );

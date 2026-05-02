@@ -12,19 +12,19 @@ type AuthState = {
   setName: (name: string | null) => void;
   email: string | null;
   setEmail: (email: string | null) => void;
-  profilePicture: string | null;
+  profilePicture: string | null | undefined;
   setProfilePicture: (profilePicture: string | null) => void;
   authProvider: "local" | "google" | null;
   setAuthProvider: (authProvider: "local" | "google" | null) => void;
-  username: string | null;
+  username: string | null | undefined;
   setUsername: (username: string | null) => void;
   setUser: (user: {
     id: string;
     name: string;
     email: string;
-    profilePicture: string;
+    profilePicture: string | null | undefined;
     authProvider: "local" | "google";
-    username: string | null;
+    username: string | null | undefined;
   }) => void;
   clearUser: () => void;
   userDataError: boolean;

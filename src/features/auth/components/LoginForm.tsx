@@ -1,82 +1,17 @@
-import { useAuth } from "@/stores";
-import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { loginSchema, type LoginSchemaType } from "../schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Resolver } from "react-hook-form";
-import api from "@/lib/api";
-import { AxiosError } from "axios";
+import { NavLink } from "react-router-dom";
 import { Button, ErrorText, InlineLoader, Input } from "@/components";
 import { FcGoogle } from "react-icons/fc";
-import { BACKEND_URL, BASE_URL } from "@/config/env";
-import { DEFAULT_REDIRECT_ROUTE } from "@/data/routes.data";
+import useLogin from "../utils/useLogin";
+import { useState } from "react";
+import useOAuth from "../utils/useOAuth";
 
 export default function LoginForm() {
   const [error, setError] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-  const { setToken, setUser } = useAuth();
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = useForm<LoginSchemaType>({
-    resolver: zodResolver(loginSchema) as unknown as Resolver<LoginSchemaType>,
-  });
-
-  const submit = async (bodyData: LoginSchemaType) => {
-    try {
-      setIsLoading(true);
-      setError(undefined);
-
-      const { data } = await api.post("/auth/login", bodyData);
-      setToken(data.token.accessToken);
-      setUser({
-        id: data.user._id,
-        name: data.user.name,
-        email: data.user.email,
-      });
-      navigate("/dashboard");
-    } catch (error) {
-      if (!(error instanceof AxiosError)) {
-        setError("Something went wrong");
-        return;
-      }
-      setError(error.response?.data.message || "Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const loginWithGoogle = async () => {
-    setError(undefined);
-    // same tab
-    // window.location.href = `${BASE_URL}/auth/google`;
-
-    // new tab
-    window.open(`${BASE_URL}/auth/google`, "_blank", "width=500,height=600");
-  };
-
-  useEffect(() => {
-    const handleMessage = async (event: MessageEvent) => {
-      if (event.origin !== BACKEND_URL) return;
-      if (event.data.from === "oauth") {
-        if (event.data.success) {
-          window.location.href = DEFAULT_REDIRECT_ROUTE;
-          return;
-        }
-        console.log("OAuth error:", event.data.error);
-        setError(event.data.message);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  const { formErrors, isLoading, register, submit } = useLogin(setError);
+  const { loginWithGoogle } = useOAuth(setError);
 
   return (
-    <form className="w-full space-y-4 max-w-md" onSubmit={handleSubmit(submit)}>
+    <form className="w-full space-y-4 max-w-md" onSubmit={submit}>
       <ErrorText error={error} />
 
       <Input
@@ -85,7 +20,7 @@ export default function LoginForm() {
         name="email"
         required
         placeholder="example@gmail.com"
-        error={errors.email?.message}
+        error={formErrors.email?.message}
         register={register}
       />
       <div className="w-full flex flex-col gap-1">
@@ -93,10 +28,9 @@ export default function LoginForm() {
           label="Password"
           type="password"
           name="password"
-          // containerClassName="border border-red-900"
           required
           placeholder="Enter your password"
-          error={errors.password?.message}
+          error={formErrors.password?.message}
           register={register}
         />
         <NavLink

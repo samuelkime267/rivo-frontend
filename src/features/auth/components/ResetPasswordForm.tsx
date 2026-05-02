@@ -11,6 +11,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { NavLink, useParams } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FaEnvelope } from "react-icons/fa";
+import { POST_RESET_PASSWORD } from "@/data/routes";
 
 export default function ResetPasswordForm() {
   const [error, setError] = useState<string>();
@@ -33,7 +34,12 @@ export default function ResetPasswordForm() {
       setIsLoading(true);
       setError(undefined);
 
-      await api.post(`/auth/reset-password/${token}`, bodyData);
+      if (!token) {
+        setError("Something went wrong");
+        return;
+      }
+
+      await api.post(POST_RESET_PASSWORD(token), bodyData);
       setIsOpen(true);
     } catch (error) {
       if (!(error instanceof AxiosError)) {

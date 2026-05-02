@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { copyText } from "@/utils";
 import { useState } from "react";
 import { FaCopy, FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useGetStreamKey } from "../utils";
 
 type StreamDetailsProps = {
   id: string;
@@ -32,8 +33,9 @@ export default function StreamDetails({
     "details",
   );
   const [showKey, setShowKey] = useState(false);
-  const [streamKey, setStreamKey] = useState("RIVO_STREAM_KEY");
   const [streamUrl, setStreamUrl] = useState("rtmp://localhost:1935/live");
+  const { data } = useGetStreamKey();
+  const { streamKey } = data || {};
 
   return (
     <div className="w-full p-4 border border-bor bg-sur rounded-lg flex items-start justify-start overflow-hidden max-w-[862px] flex-col gap-4">
@@ -192,17 +194,23 @@ export default function StreamDetails({
               </Button>
             </div>
             <div className="flex items-center justify-start gap-2">
-              {!showKey ? (
+              {streamKey ? (
                 <>
-                  <p>******************************************</p>
+                  {!showKey ? (
+                    <>
+                      <p>******************************************</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>{streamKey}</p>
+                      <Button onClick={() => copyText(streamKey)}>
+                        <FaCopy className="size-3" />
+                      </Button>
+                    </>
+                  )}
                 </>
               ) : (
-                <>
-                  <p>{streamKey}</p>
-                  <Button onClick={() => copyText(streamKey)}>
-                    <FaCopy className="size-3" />
-                  </Button>
-                </>
+                "Something went wrong fetching your stream key"
               )}
             </div>
           </div>

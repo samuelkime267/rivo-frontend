@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FaCheck } from "react-icons/fa";
+import { GET_VERIFY_EMAIL, POST_VERIFY_EMAIL } from "@/data/routes";
 
 export default function VerifyEmailForm() {
   const maxLength = 6;
@@ -25,7 +26,7 @@ export default function VerifyEmailForm() {
       setIsLoading(true);
       setError(undefined);
 
-      await api.get(`/auth/verify-email/${otp}`);
+      await api.get(GET_VERIFY_EMAIL(otp));
       setIsOpen(true);
     } catch (error) {
       if (!(error instanceof AxiosError)) {
@@ -73,7 +74,7 @@ export default function VerifyEmailForm() {
       setIsLoading(true);
       setError(undefined);
 
-      await api.post(`/auth/verify-email`);
+      await api.post(POST_VERIFY_EMAIL);
       setSentDate(new Date());
     } catch (error) {
       if (!(error instanceof AxiosError)) {

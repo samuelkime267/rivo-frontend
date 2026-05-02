@@ -11,6 +11,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FaEnvelope } from "react-icons/fa";
+import { POST_FORGOT_PASSWORD } from "@/data/routes";
 
 export default function ForgotPasswordForm() {
   const [error, setError] = useState<string>();
@@ -64,7 +65,7 @@ export default function ForgotPasswordForm() {
       setIsLoading(true);
       setError(undefined);
 
-      await api.post("/auth/forgot-password", bodyData);
+      await api.post(POST_FORGOT_PASSWORD, bodyData);
       setSentDate(new Date());
       setIsOpen(true);
     } catch (error) {

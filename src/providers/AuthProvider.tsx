@@ -1,3 +1,4 @@
+import { AUTH_REFRESH_TOKEN, GET_ME } from "@/data/routes";
 import {
   authRoutes,
   authVerificationRoutes,
@@ -29,9 +30,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const fetchToken = async () => {
       try {
         setIsLoading(true);
-        const { data } = await api.post("/auth/refresh-token");
-        setToken(data.token.accessToken);
-      } catch {
+        const { data } = await api.post(AUTH_REFRESH_TOKEN);
+        setToken(data.data.accessToken);
+      } catch (error) {
+        console.log(error);
         setToken(null);
       } finally {
         setIsLoading(false);
@@ -45,14 +47,16 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const fetchUser = async () => {
       if (token && !id) {
         try {
-          const { data } = await api.get("/user/me");
+          const {
+            data: { data },
+          } = await api.get(GET_ME);
           setUser({
-            id: data.user._id,
-            name: data.user.name,
-            email: data.user.email,
-            profilePicture: data.user.profilePicture,
-            authProvider: data.user.authProvider,
-            username: data.user.username,
+            id: data._id,
+            name: data.name,
+            email: data.email,
+            profilePicture: data.profilePicture,
+            authProvider: data.authProvider,
+            username: data.username,
           });
           setUserDataError(false);
         } catch {
@@ -89,7 +93,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
         if (!originalRequest) return Promise.reject(error);
 
-        if (originalRequest.url === "/auth/refresh-token")
+        if (originalRequest.url === AUTH_REFRESH_TOKEN)
           return Promise.reject(error);
 
         if (
@@ -98,7 +102,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             "User not authenticated"
         ) {
           try {
-            const { data } = await api.get("/auth/refresh-token");
+            const { data } = await api.post(AUTH_REFRESH_TOKEN);
             setToken(data.accessToken);
 
             originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
