@@ -41,7 +41,11 @@ export const apiHandler = async <TDataSchema extends z.ZodTypeAny>(
       const parsedError = ApiErrorSchema.safeParse(error.response?.data);
 
       if (parsedError.success) {
-        throw new AppError(parsedError.data.message, "api");
+        throw new AppError(
+          parsedError.data.message,
+          "api",
+          error.response?.status,
+        );
       }
 
       throw new AppError(

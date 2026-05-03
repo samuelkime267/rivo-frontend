@@ -1,2 +1,2 @@
-export * from "./useGetStreamDetails";
+export * from "./useGetDefaultStreamInfo";
 export * from "./useGetStreamKey";

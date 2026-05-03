@@ -17,7 +17,7 @@ export default function Comment({
         <UserProfileImg
           name={username}
           profilePicture={profilePicture}
-          className="size-3"
+          className="size-3 text-[8px]"
         />
         <p className="text-xs text-text-pri inline-block font-medium">
           {username}
