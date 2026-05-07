@@ -18,7 +18,7 @@ export default function Header() {
   const isAuthRoute = pathname.startsWith(AUTH_PREFIX);
   const isStreamRoute = pathname.startsWith(CREATOR_STREAM_ROUTE);
   const [{ duration, isLive }] = useState({
-    isLive: true,
+    isLive: false,
     duration: "00:00",
   });
 

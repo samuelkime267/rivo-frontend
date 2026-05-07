@@ -25,6 +25,7 @@ export default function StreamDetails() {
     category,
     tags: defaultTags,
   } = defaultInfoData || {};
+  const emptyArr = [...Array(58)];
 
   return (
     <div className="w-full p-4 border border-bor bg-sur rounded-lg flex items-start justify-start overflow-hidden max-w-[862px] flex-col gap-4 relative">
@@ -124,17 +125,18 @@ export default function StreamDetails() {
               {streamKey ? (
                 <>
                   {!showKey ? (
-                    <>
-                      <p>******************************************</p>
-                    </>
+                    <div className="flex gap-0.5 py-2.5">
+                      {emptyArr.map((_, i) => (
+                        <div key={i} className="bg-white rounded-full size-1" />
+                      ))}
+                    </div>
                   ) : (
-                    <>
-                      <p>{streamKey}</p>
-                      <Button onClick={() => copyText(streamKey)}>
-                        <FaCopy className="size-3" />
-                      </Button>
-                    </>
+                    <p>{streamKey}</p>
                   )}
+
+                  <Button onClick={() => copyText(streamKey)}>
+                    <FaCopy className="size-3" />
+                  </Button>
                 </>
               ) : (
                 "Something went wrong fetching your stream key"
